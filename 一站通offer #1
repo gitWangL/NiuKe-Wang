@@ -1,0 +1,38 @@
+class Transform {
+public:
+    void change(char &ch1)
+    {
+        if(ch1 >= 'a' && ch1 <= 'z')
+            ch1 -= ('a' - 'A');
+        else if(ch1 >= 'A' && ch1 <= 'Z')
+            ch1 += ('a' - 'A');
+    }
+
+    void swap(char &ch1, char &ch2)
+    {
+        char tmp = ch1;
+        ch1 = ch2;
+        ch2 = tmp;
+    }
+    string trans(string s, int n) {
+        // write code here
+        int len = n;
+        for(int i = 0; i < len / 2; i++)
+            swap(s[i], s[len - 1 - i]);
+        int i  = 0, j = 0;
+        while(i < len && j < len)
+        {
+            while(i < len && s[i] == ' ')
+                i++;
+            j = i;
+            while(j < len && s[j] != ' ')
+                j++;
+            for(int k = 0; k < (j - i) / 2; k++)
+				swap(s[i + k], s[j - 1 - k]);
+            i = j + 1;
+        }
+        for(int i = 0; i < len; i++)
+			change(s[i]);
+        return s;
+    }
+};
