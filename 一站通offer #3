@@ -1,0 +1,51 @@
+/*
+struct TreeNode {
+    int val;
+    struct TreeNode *left;
+    struct TreeNode *right;
+    TreeNode(int x) :
+            val(x), left(NULL), right(NULL) {
+    }
+};*/
+
+class LongestPath {
+public:
+    int subFind(TreeNode * root, int &longest, int& root_is_head, int& root_isnt_head)
+    {
+        if(root == NULL)
+        {
+            root_is_head = root_isnt_head = 0;
+            return 0;
+        }
+        int lrih = 0, lrnh = 0;
+        int rrih = 0, rrnh = 0;
+        int leftchild = subFind(root->left, longest, lrih, lrnh);
+        int rightchild = subFind(root->right, longest, rrih, rrnh);
+        if(leftchild == root->val)
+            root_is_head = lrih + 1;
+        if(rightchild == root->val && rrih + 1 > root_is_head)
+            root_is_head = rrih + 1;
+        if(rightchild != root->val && leftchild != root->val)
+            root_is_head = 1;
+        if(rightchild == root->val && leftchild == root->val)
+            root_isnt_head = 1 + lrih + rrih;
+        if(lrnh > root_isnt_head)
+            root_isnt_head = lrnh;
+        if(rrnh > root_isnt_head)
+            root_isnt_head = rrnh;
+
+        if(root_is_head > longest)
+            longest = root_is_head;
+        if(root_isnt_head > longest)
+            longest = root_isnt_head;
+        return root->val;
+    }
+    int findPath(TreeNode* root) {
+        // write code here
+        int longest = 0;
+        int root_is_head = 0;
+        int root_isnt_head = 0;
+        subFind(root, longest, root_is_head, root_isnt_head);
+        return longest;
+    }
+};
