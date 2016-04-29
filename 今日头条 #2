@@ -1,0 +1,78 @@
+#include <iostream>
+
+using namespace std;
+
+class Node
+{
+public:
+	Node(int value)
+	{
+		val = value;
+		next = NULL;
+	}
+	int val;
+	Node* next;
+};
+
+long long int sum = 0;
+
+void insert(int val, Node* root)
+{
+	Node* pre = root;
+	Node* head = root->next;
+	while(head)
+	{
+		if(head->val > val)
+		{
+			pre = pre->next;
+			head = head->next;
+		}
+		else
+			break;
+	}
+	Node* tmp = new Node(val);
+	pre->next = tmp;
+	tmp->next = head;
+	sum += val;
+}
+
+void remove(int val, Node* root)
+{
+	Node* pre = root;
+	Node* head = root->next;
+	while(head)
+	{
+		if(head->val != val)
+		{
+			pre = pre->next;
+			head = head->next;
+		}
+		else
+			break;
+	}
+	pre->next = head->next;
+	delete head;
+	sum -= val;
+}
+
+int main()
+{
+	int n;
+	cin>>n;
+	Node* vir = new Node(0);  // 虚拟的头
+	for(int i = 0; i < n; i++)
+	{
+		int val, cmd;
+		cin>>cmd>>val;
+		if(cmd == 1)
+			insert(val, vir);
+		else
+			remove(val, vir);
+		if(vir->next->val < sum - vir->next->val)
+			cout<<"Yes"<<endl;
+		else
+			cout<<"No"<<endl;
+	}
+	//system("pause");
+	return 0;
+}
