@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main()
+{
+	int n;
+	long long int count[10];
+	bool flag[10];
+	for(int i = 0; i < 10; i++)
+	{
+		count[i] = 0;
+		flag[i] = true;
+	}
+	cin>>n;
+	for(int i = 0; i < n; i++)
+	{
+		string s;
+		cin>>s;
+		int len = s.length();
+		long long int weight = 1;
+		for(int j = 0; j < len; j++)
+		{
+			int now = len - 1 - j;
+			count[s[now] - 'A'] += weight;
+			weight *= 10;
+		}
+		flag[s[0] - 'A'] = false;
+	}
+
+	for(int i = 0; i < 10; i++)
+	{
+		for(int j = 0; j < 9 - i; j++)
+		{
+			if(count[j] < count[j + 1])
+			{
+				long long int itmp = count[j];
+				count[j] = count[j + 1];
+				count[j + 1] = itmp;
+
+				bool btmp = flag[j];
+				flag[j] = flag[j + 1];
+				flag[j + 1] = btmp;
+			}
+		}
+	}
+
+	int nozero = 10;
+	for(int i = 9; i >= 0; i--)
+		if(flag[i])
+		{
+			nozero = i;
+			break;
+		}
+	long long int sum = 0;
+	for(int i = 0, j = 9; i < 10; i++)
+	{
+		if(i == nozero)
+			continue;
+		sum += count[i] * j;
+		j--;
+	}
+	cout<<sum<<endl;
+	//system("pause");
+	return 0;
+}
