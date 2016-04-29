@@ -1,0 +1,65 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<string> strs;
+vector<int> flag;
+int n, k;
+int count;
+
+void backTracking(int pos, vector<int> &sequence)
+{
+	if(pos == n)
+	{
+		string s;
+		
+		for(int i = 0; i < n; i++)
+			s += strs[sequence[i]];
+
+		string tmps = s;
+		int lcount = 1;
+		for(int i = 0; i < s.length() / 2; i++)
+		{
+			tmps = tmps.substr(1) + tmps[0];
+			if(tmps == s)
+			{
+				lcount = s.length() / (i + 1);
+				break;
+			}
+		}
+		if(lcount == k)
+			count++;
+		return;
+	}
+	for(int i = 0; i < n; i++)
+	{
+		if(flag[i])
+		{
+			sequence.push_back(i);
+			flag[i] = false;
+			backTracking(pos + 1, sequence);
+			flag[i] = true;
+			sequence.resize(sequence.size() - 1);
+		}
+	}
+}
+
+int main()
+{
+	count = 0;
+	cin>>n>>k;
+	strs.resize(n);
+	flag.resize(n);
+	vector<int> seq;
+	
+	for(int i = 0; i < n; i++)
+	{
+		cin>>strs[i];
+		flag[i] = true;
+	}
+	backTracking(0, seq);
+	cout<<count<<endl;
+	return 0;
+}
